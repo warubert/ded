@@ -1,0 +1,7 @@
+{
+  "name": "ded",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
