@@ -1,20 +1,97 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-menu contentId="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <ion-item (click)="selectMenuItem('home')">
+        Home - Leia-me!
+      </ion-item>
+      <ion-item>
+        Banco Local
+      </ion-item>
+      <ion-item  (click)="selectMenuItem('rxdb')">
+        ability-scores
+      </ion-item>
+      <ion-item>
+        D&D5 API
+      </ion-item>
+      <ion-item *ngFor="let item of menuItems" (click)="selectMenuItem(item)">
+        {{ item }}
+      </ion-item>
+    </ion-content>
+  </ion-menu>
+  <div class="ion-page" id="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Projeto D&D5 by Will</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div *ngIf="!selected || selected === 'home'">
+        <h1>SOBRE</h1>
+        <h2>Oi! Esse projeto é um projeto pessoal e está sendo desenvolvido em meu tempo livre.</h2>
+        <h2>
+          O objetivo desse projeto é criar um aplicativo que facilite a criação de fichas de rpg no sistema D&D5.
+          O principal objetivo é preencher a falta de aplicativos (na verdade não existe nenhum) que façam isso em portugues ( e espanhol mas feito de forma que adicionar outras linguas seja simples).
+          Outro ponto importante para mim é que o aplicativo possa ser usado de forma offline, visto a relaidade brasileira. Existe uma api da wizards que disponibiliza todas as informações necessárias em ingles,
+          a minha ideia é utilizar o rxdb para fazer um banco de dados local no device que esta rodando o app enquanto traduzo o conteudo (o que é muita coisa).
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+          Estou utilizando esse projeto como demonstração para a vaga na Hubchannel embora esteja longe de estar completo.
+          Para essa demonstração a coleção 'ability-scores' que pode ser encontrada no menu pode ser acessada no banco local com as traduções.
+          Os demais itens são acessados pela api e apenas mostram  conteúdo selecionado, a ideia é um dia conseguir fazer o mesmo para todas e acrescentar a lógica para a criação de personagens.
+
+          Att. William A Rubert
+        </h2>
+      </div>
+      <div *ngIf="selected && selected === 'rxdb'">
+        <ion-item>
+          <ion-select label="Lingua" (ionChange)="changeLang()" [(ngModel)]="lang">
+            <ion-select-option value="pt">Portugues</ion-select-option>
+            <ion-select-option value="es">Espanhol</ion-select-option>
+            <ion-select-option value="en">Ingles</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-select label="Ability Score" (ionChange)="handleChangeRxdb()" [(ngModel)]="optionSelected">
+            <ion-select-option *ngFor="let item of selectedOptions" value={{item.index}}>{{ item.name }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <div *ngIf="optionSelected">
+              <h2>
+              {{ objSelected.full_name }} - {{ objSelected.name }}
+            </h2>
+            <h2>
+              {{ objSelected.desc }}
+            </h2>
+          <h2>
+            Skills: 
+          </h2>
+          <h3 *ngFor="let skill of objSelected.skills">
+            {{ skill.name }}
+          </h3>
+        </div>
+      </div>
+      <div *ngIf="selected && (selected !== 'home' && selected !== 'rxdb')">
+        {{ selected }} <br>
+        <ion-item>
+          <ion-select label={{selected}} (ionChange)="handleChange()" [(ngModel)]="optionSelected">
+            <ion-select-option *ngFor="let item of selectedOptions" value={{item.url}}>{{ item.name }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <div *ngIf="optionSelected">
+          <pre json-pretty>
+  
+            {{ objSelected }}
+          </pre>
+        </div>
+      </div>
+
+    </ion-content>
   </div>
 </ion-content>
