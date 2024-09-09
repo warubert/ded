@@ -84,7 +84,7 @@ export class HomePage implements OnInit {
 
   async handleChange(){
     console.log(this.optionSelected)
-    this.objSelected = JSON.stringify(await this.apiService.getFeatureByIndex(this.optionSelected),null,2)
+    this.objSelected = JSON.stringify(await this.apiService.getFeatureByIndex(this.optionSelected),null,4)
     console.log(this.objSelected)
   }
 

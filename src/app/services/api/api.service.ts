@@ -7,6 +7,8 @@ import axios from 'axios';
 })
 export class ApiService {
   private apiURL = "https://www.dnd5eapi.co/api/";
+  private apiURL2 = "https://www.dnd5eapi.co";
+
   public resources = {
     "ability-scores": "/api/ability-scores",
     "alignments": "/api/alignments",
@@ -49,7 +51,7 @@ export class ApiService {
   }
 
   getFeatureByIndex(url: string) {
-    const urlAux = this.apiURL + url.split("/api")[1]
+    let urlAux = this.apiURL2 + url
     console.log(urlAux)
     return axios
       .get(urlAux)

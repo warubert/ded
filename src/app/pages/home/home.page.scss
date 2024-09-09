@@ -25,3 +25,52 @@
 #container a {
   text-decoration: none;
 }
+
+h1 {
+  text-align: center;
+  text-transform: capitalize;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 1rem;
+    text-align: left;
+    margin: 5px 30px;
+}
+
+ion-menu {
+  font-weight: 600;
+
+  h2{
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+  .title {
+    margin: 5px 10px;
+  }
+}
+
+ion-header {
+  .toolbar-background{
+    background-color: #b81414;
+  }
+}
+
+.inner-scroll {
+  padding: 0;
+}
+
+pre, .container {
+  background-color: #e8e8e8;
+  border-radius: 20px;
+  padding: 20px 0;
+}
+
+.container {
+  margin: 30px 10px;
+  padding: 10px;
+
+  .title {
+    font-weight: 600;
+  }
+}

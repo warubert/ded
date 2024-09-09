@@ -16,6 +16,10 @@ export class rxdbService {
 
   constructor() {}
 
+  setDatabase(db: any) {
+    this.myDatabase = db;
+  }
+
   async initDatabase() {
     this.myDatabase = await createRxDatabase({
     name: 'ded_db',
@@ -46,12 +50,14 @@ export class rxdbService {
     }).exec()).map( (doc:any) => {return doc._data});
   }
 
-  async findASbyIndex(index:string){
-    return (await this.myDatabase.ability_scores.findOne({
+  async findASbyIndex(index: string) {
+    const result = await this.myDatabase.ability_scores.findOne({
       selector: {
         index: index
       }
-    }).exec())._data
+    }).exec();
+    
+    return result ? result._data : null;
   }
 
   async insertAS(){
