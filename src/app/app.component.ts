@@ -17,6 +17,7 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     console.log("Init...")
+
     await this.rxdbService.initDatabase();
 
     const foundDocuments = await this.rxdbService.findAS()
@@ -30,8 +31,8 @@ export class AppComponent implements OnInit {
       console.log("documento existe")
     }
 
-    // const foundDocuments2 = await this.rxdbService.findAS()
-    // console.log(foundDocuments2.map( (doc:any) => {return doc._data}))
-    // await this.rxdbService.destroyDatabase();
+    const foundDocuments2 = await this.rxdbService.findAS()
+    console.log(foundDocuments2.map( (doc:any) => {return doc._data}))
+    await this.rxdbService.destroyDatabase();
   }
 }

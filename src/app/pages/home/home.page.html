@@ -76,13 +76,6 @@
       <div *ngIf="selected && selected === 'rxdb'">
         <h1>Ability Score</h1>
         <ion-item>
-          <ion-select label="Lingua" (ionChange)="changeLang()" [(ngModel)]="lang">
-            <ion-select-option value="pt">Portugues</ion-select-option>
-            <ion-select-option value="es">Espanhol</ion-select-option>
-            <ion-select-option value="en">Ingles</ion-select-option>
-          </ion-select>
-        </ion-item>
-        <ion-item>
           <ion-select label="Ability Score" (ionChange)="handleChangeRxdb()" [(ngModel)]="optionSelected">
             <ion-select-option *ngFor="let item of selectedOptions" value={{item.index}}>{{ item.name }}</ion-select-option>
           </ion-select>
