@@ -63,6 +63,7 @@ export class rxdbService {
 
   async insertAS(){
     for(let i=0; i < abilityScores.length; i++){
+      console.log("inserindo", abilityScores[i].index, "...")
       await this.myDatabase['ability_scores'].insert(abilityScores[i]);
     }
   }

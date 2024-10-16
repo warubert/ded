@@ -39,7 +39,7 @@ export class HomePage implements OnInit {
     } else if (option === "rxdb"){
       this.selectedOptions = await this.rxdbService.findAS()
       for(let i=0; i < this.selectedOptions.length; i++){
-        this.selectedOptions[i] = this.processObjectWithLang(this.selectedOptions[i], this.lang)
+        this.selectedOptions[i] = this.selectedOptions[i]
       }
       console.log(this.selectedOptions)
     } else {
@@ -52,36 +52,6 @@ export class HomePage implements OnInit {
     this.menu.close();
   }
 
-  processObjectWithLang(obj:any, lang:string) {
-    const result = { ...obj };
-
-    for (const [key, value] of Object.entries(result)) {
-      if (Array.isArray(value)) {
-        if (key === 'skills') {
-          // Para a propriedade 'skills', extrair 'name.value' do idioma correspondente
-          result[key] = value.map(skill => {
-            const nameItem = skill.name.find((item: any) => item.lang === lang);
-            return {
-              ...skill,
-              name: nameItem ? nameItem.value : `No name found for language ${lang}`
-            };
-          });
-        } else {
-          // Para outras propriedades, buscar o valor do campo 'value'
-          const found = value.find(item => item.lang === lang);
-          result[key] = found ? found.value : `No value found for language ${lang}`;
-        }
-      }
-    }
-
-    delete result._meta
-    delete result._deleted
-    delete result._attachments
-    delete result._rev
-  
-    return result;
-  };
-
   async handleChange(){
     console.log(this.optionSelected)
     this.objSelected = JSON.stringify(await this.apiService.getFeatureByIndex(this.optionSelected),null,4)
@@ -89,17 +59,6 @@ export class HomePage implements OnInit {
   }
 
   async handleChangeRxdb(){
-    console.log(this.optionSelected)
     this.objSelected = await this.rxdbService.findASbyIndex(this.optionSelected)
-    console.log(this.objSelected)
-    this.objSelected = this.processObjectWithLang(this.objSelected, this.lang)
-    console.log(this.objSelected)
-    // this.objSelected = JSON.stringify(this.objSelected,null,2)
-    // console.log(this.objSelected)
   }
-
-  async changeLang() {
-    await this.handleChangeRxdb()
-  }
-  
 }
