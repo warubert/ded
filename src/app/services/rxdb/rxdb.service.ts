@@ -3,16 +3,17 @@ import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
 import { createRxDatabase } from 'rxdb';
 
 //schemas
-import { abilityScoresSchema } from '../../db/ability-scores/ability-scores.schema';
+import { abilityScoresSchema } from '../../db/en/ability-scores/ability-scores.schema';
 
 //data
-import { abilityScores }  from '../../db/ability-scores/ability-scores';
+import { abilityScores }  from '../../db/en/ability-scores/ability-scores';
 
 @Injectable({
   providedIn: 'root'
 })
 export class rxdbService {
   public myDatabase: any
+  public dbName: string = "ded"
 
   constructor() {}
 
@@ -22,7 +23,7 @@ export class rxdbService {
 
   async initDatabase() {
     this.myDatabase = await createRxDatabase({
-    name: 'ded_db',
+    name: this.dbName,
     storage: getRxStorageDexie()
     });
 
