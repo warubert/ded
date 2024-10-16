@@ -20,13 +20,13 @@ export class AppComponent implements OnInit {
 
     await this.rxdbService.initDatabase();
 
-    const foundDocuments = await this.rxdbService.findAS()
+    const foundDocuments = await this.rxdbService.findCollection("ability_scores")
     console.log(foundDocuments)
 
     //testa se documento existe (nesse caso banco existe)
     if(foundDocuments.length == 0) {
       console.log("insere documentos")
-      await this.rxdbService.insertAS()
+      await this.rxdbService.insertCollections()
     } else {
       console.log("documento existe")
     }

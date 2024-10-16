@@ -6,7 +6,7 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-no-padding">
-      <ion-accordion-group [multiple]="true" [value]="['first']">
+      <ion-accordion-group [multiple]="true" [value]="['first', 'second']">
         <ion-accordion value="first">
             <ion-item slot="header" color="primary">
               <ion-icon name="home-sharp"></ion-icon>
@@ -23,13 +23,13 @@
             <ion-icon name="server-sharp"></ion-icon>
             <h2 class="title">Banco Local</h2>
           </ion-item>
-        <div class="ion-padding" slot="content">
-          <ion-item lines="none" (click)="selectMenuItem('rxdb')">
-            <h2>ability-scores</h2>
-          </ion-item>
-        </div>
+          <div class="ion-padding" slot="content">
+            <ion-item lines="none" *ngFor="let item of collections" (click)="selectMenuItem(item)">
+              <h2>{{ item }}</h2>
+            </ion-item>
+          </div>
         </ion-accordion>
-        <ion-accordion value="third">
+        <!-- <ion-accordion value="third">
           <ion-item slot="header" color="primary">
             <ion-icon name="cloudy-sharp"></ion-icon>
             <h2 class="title">D&D5 API</h2>
@@ -39,7 +39,7 @@
             <h2>{{ item }}</h2>
           </ion-item>
         </div>
-        </ion-accordion>
+        </ion-accordion> -->
       </ion-accordion-group>
     </ion-content>
   </ion-menu>
@@ -69,38 +69,16 @@
         </h2>
       </div>
       </div>
-      <div *ngIf="selected && selected === 'rxdb'">
-        <h1>Ability Score</h1>
-        <ion-item>
-          <ion-select label="Ability Score" (ionChange)="handleChangeRxdb()" [(ngModel)]="optionSelected">
-            <ion-select-option *ngFor="let item of selectedOptions" value={{item.index}}>{{ item.name }}</ion-select-option>
-          </ion-select>
-        </ion-item>
-        <div class="container" *ngIf="optionSelected">
-              <h2 class="title">
-              {{ objSelected.full_name }} - {{ objSelected.name }}
-            </h2>
-            <h2>
-              {{ objSelected.desc }}
-            </h2>
-          <h2 class="title">
-            Skills: 
-          </h2>
-          <h2 *ngFor="let skill of objSelected.skills">
-            {{ skill.name }}
-          </h2>
-        </div>
-      </div>
-      <div *ngIf="selected && (selected !== 'home' && selected !== 'rxdb')">
+      <div *ngIf="selected && selected !== 'home'">
         <h1>{{ selected }}</h1>
         <ion-item>
           <ion-select label={{selected}} (ionChange)="handleChange()" [(ngModel)]="optionSelected">
-            <ion-select-option *ngFor="let item of selectedOptions" value={{item.url}}>{{ item.name }}</ion-select-option>
+            <ion-select-option *ngFor="let item of selectedOptions" value={{item.index}}>{{ item.name }}</ion-select-option>
           </ion-select>
         </ion-item>
         <div *ngIf="optionSelected">
           <pre>
-            {{ objSelected }}
+            {{ objSelected | json}}
           </pre>
         </div>
       </div>

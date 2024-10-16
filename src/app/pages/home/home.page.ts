@@ -16,7 +16,7 @@ export class HomePage implements OnInit {
   optionSelected: string = ""
   objSelected: any
   selectedOptions: any[] = []
-  lang: string = "pt"
+  collections: string[] = []
 
   constructor(
     private apiService: ApiService,
@@ -25,6 +25,7 @@ export class HomePage implements OnInit {
   ) {}
 
   async ngOnInit() {
+    this.collections = this.rxdbService.collections
     console.log("home")
     this.menuItems = Object.keys(this.apiService.resources)
     console.log(this.menuItems)
@@ -36,14 +37,11 @@ export class HomePage implements OnInit {
     this.selected = option
     if(option === "home") {
 
-    } else if (option === "rxdb"){
-      this.selectedOptions = await this.rxdbService.findAS()
+    } else {
+      this.selectedOptions = await this.rxdbService.findCollection(option)
       for(let i=0; i < this.selectedOptions.length; i++){
         this.selectedOptions[i] = this.selectedOptions[i]
       }
-      console.log(this.selectedOptions)
-    } else {
-      this.selectedOptions = await this.apiService.getFeature(option)
       console.log(this.selectedOptions)
     }
 
@@ -53,12 +51,6 @@ export class HomePage implements OnInit {
   }
 
   async handleChange(){
-    console.log(this.optionSelected)
-    this.objSelected = JSON.stringify(await this.apiService.getFeatureByIndex(this.optionSelected),null,4)
-    console.log(this.objSelected)
-  }
-
-  async handleChangeRxdb(){
-    this.objSelected = await this.rxdbService.findASbyIndex(this.optionSelected)
+    this.objSelected = await this.rxdbService.findIndex(this.optionSelected, this.selected)
   }
 }
