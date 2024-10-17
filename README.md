@@ -30,3 +30,20 @@ teste
 ```shell
 npm run test
 ```
+
+## Rodando docker:
+# Com docker compose:
+```shell
+docker compose up
+```
+
+# Com docker:
+Buildando imagem
+```shell
+docker build -t ded .
+```
+
+Rodando o container
+```shell
+docker container run --name ded -p 8100:8100 ded
+```
