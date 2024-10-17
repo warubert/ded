@@ -1,97 +1,92 @@
 import { TestBed } from '@angular/core/testing';
-import { rxdbService } from './rxdb.service';
-import { createRxDatabase } from 'rxdb';
+import { rxdbService } from './rxdb.service'; // Ajuste o caminho conforme necessário
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
+import { createRxDatabase } from 'rxdb';
 
-// Mock das dependências
+import { abilityScores }  from '../../db/en/ability-scores/ability-scores';
+import { alignments } from '../../db/en/alignments/alignments';
+
+// Mocks
+jest.mock('rxdb/plugins/storage-dexie');
 jest.mock('rxdb', () => ({
   createRxDatabase: jest.fn(),
 }));
 
-jest.mock('rxdb/plugins/storage-dexie', () => ({
-  getRxStorageDexie: jest.fn(),
-}));
-
-import { abilityScoresSchema } from '../../db/ability-scores/ability-scores.schema';
-import { abilityScores } from '../../db/ability-scores/ability-scores';
-
 describe('rxdbService', () => {
   let service: rxdbService;
-  let mockDatabase: any;
+  let mockDb: any;
 
-  beforeEach(async () => {
-    TestBed.configureTestingModule({
-      providers: [rxdbService],
-    });
-
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
     service = TestBed.inject(rxdbService);
 
-    // Cria uma instância mock do banco de dados
-    mockDatabase = {
+    // Configurando um banco de dados simulado
+    mockDb = {
+      addCollections: jest.fn(),
+      destroy: jest.fn(),
       ability_scores: {
         find: jest.fn().mockReturnValue({
           exec: jest.fn().mockResolvedValue([]),
         }),
-        findOne: jest.fn().mockReturnValue({
-          exec: jest.fn().mockResolvedValue({
-            _data: { index: 'str' },
-          }),
-        }),
-        insert: jest.fn().mockResolvedValue({}),
+        insert: jest.fn(),
       },
-      addCollections: jest.fn().mockResolvedValue({}),
-      destroy: jest.fn().mockResolvedValue({}),
+      alignments: {
+        find: jest.fn().mockReturnValue({
+          exec: jest.fn().mockResolvedValue([]),
+        }),
+        insert: jest.fn(),
+      },
     };
 
-    // Simula a configuração do banco de dados
-    (createRxDatabase as jest.Mock).mockResolvedValue(mockDatabase);
-    (getRxStorageDexie as jest.Mock).mockReturnValue({});
-
-    await service.initDatabase(); // Inicializa o banco de dados no serviço
-    service.myDatabase = mockDatabase; // Define o banco de dados mockado no serviço
+    (createRxDatabase as jest.Mock).mockResolvedValue(mockDb);
   });
 
-  it('should destroy the database and remove documents', async () => {
-    // Configura o mock para retornar documentos
-    mockDatabase.ability_scores.find.mockReturnValue({
-      exec: jest.fn().mockResolvedValue([{ remove: jest.fn() }]),
-    });
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
 
+  it('should initialize the database', async () => {
+    await service.initDatabase();
+    expect(createRxDatabase).toHaveBeenCalledWith({
+      name: service.dbName,
+      storage: getRxStorageDexie(),
+    });
+    expect(mockDb.addCollections).toHaveBeenCalledTimes(service.collections.length);
+  });
+
+  it('should destroy the database', async () => {
+    service.myDatabase = mockDb;
     await service.destroyDatabase();
-
-    expect(mockDatabase.ability_scores.find).toHaveBeenCalled();
-    expect(mockDatabase.ability_scores.find().exec).toHaveBeenCalled();
-    expect(mockDatabase.ability_scores.find().exec().then((docs: any) => docs.forEach((doc: any) => expect(doc.remove).toHaveBeenCalled())));
-    expect(mockDatabase.destroy).toHaveBeenCalled();
+    expect(mockDb.destroy).toHaveBeenCalled();
   });
 
-  it('should find all ability scores', async () => {
-    const mockDocs = [{ _data: { index: 'str' } }];
-    mockDatabase.ability_scores.find.mockReturnValue({
-      exec: jest.fn().mockResolvedValue(mockDocs),
-    });
-
-    const result = await service.findAS();
-
-    expect(result).toEqual(mockDocs.map(doc => doc._data));
+  it('should find a collection', async () => {
+    service.myDatabase = mockDb;
+    const result = await service.findCollection('ability_scores');
+    expect(result).toEqual([]);
+    expect(mockDb.ability_scores.find).toHaveBeenCalled();
   });
 
-  it('should find ability score by index', async () => {
-    const mockDoc = { _data: { index: 'str' } };
-    mockDatabase.ability_scores.findOne.mockReturnValue({
-      exec: jest.fn().mockResolvedValue(mockDoc),
+  it('should find an index in a collection', async () => {
+    const mockResult = { _data: { index: 'test' } };
+    
+    // Ajustando o mock para a coleção e o método findOne
+    mockDb.ability_scores.findOne = jest.fn().mockReturnValue({
+      exec: jest.fn().mockResolvedValue(mockResult),
     });
-
-    const result = await service.findASbyIndex('str');
-
-    expect(result).toEqual(mockDoc._data);
+  
+    // Certifique-se de que myDatabase é definido antes de chamar findIndex
+    service.myDatabase = mockDb;
+  
+    const result = await service.findIndex('test', 'ability_scores');
+    expect(result).toEqual(mockResult._data);
   });
 
-  it('should insert ability scores', async () => {
-    await service.insertAS();
-
-    abilityScores.forEach(item => {
-      expect(mockDatabase.ability_scores.insert).toHaveBeenCalledWith(item);
-    });
+  it('should insert collections', async () => {
+    service.myDatabase = mockDb;
+    await service.insertCollections();
+    
+    expect(mockDb.ability_scores.insert).toHaveBeenCalledTimes(abilityScores.length);
+    expect(mockDb.alignments.insert).toHaveBeenCalledTimes(alignments.length);
   });
 });
