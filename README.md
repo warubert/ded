@@ -9,7 +9,8 @@ O projeto visa a criação de um app hibrido utilizando Ionic (https://ionicfram
 Para demonstração a coleção 'ability-scores' que pode ser encontrada no menu pode ser acessada no banco local com as traduções.
 Os demais itens são acessados pela api e apenas mostram o conteúdo selecionado, a ideia é um dia conseguir fazer o mesmo para todas e acrescentar a lógica para a criação de personagens.
 
-## How to Run
+## Como rodar:
+### local
 Instalando Ionic:
 ```shell
 npm install -g @ionic/cli
@@ -31,13 +32,12 @@ teste
 npm run test
 ```
 
-## Rodando docker:
-# Com docker compose:
+### Com docker compose:
 ```shell
 docker compose up
 ```
 
-# Com docker:
+#### Com docker:
 Buildando imagem
 ```shell
 docker build -t ded .
