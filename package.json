@@ -8,7 +8,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "jest",
+    "test": "jest --coverage",
     "lint": "ng lint"
   },
   "private": true,
@@ -31,6 +31,7 @@
     "ionicons": "^7.0.0",
     "rxdb": "^15.28.1",
     "rxjs": "~7.8.0",
+    "sonar-scanner": "^3.1.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
@@ -49,7 +50,7 @@
     "@capacitor/cli": "6.1.1",
     "@ionic/angular-toolkit": "^11.0.1",
     "@types/jasmine": "~5.1.0",
-    "@types/jest": "^29.5.12",
+    "@types/jest": "^29.5.13",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "babel-core": "^7.0.0-bridge.0",
