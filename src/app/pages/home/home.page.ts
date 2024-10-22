@@ -28,7 +28,14 @@ export class HomePage implements OnInit {
     this.collections = this.rxdbService.collections
     console.log("home")
     this.menuItems = Object.keys(this.apiService.resources)
-    console.log(this.menuItems)
+    console.log("Resources: ", this.menuItems)
+    const aux = await this.apiService.getFeature(this.menuItems[0])
+    console.log(this.menuItems[0], aux[0].index, aux)
+    for(let i=0;  i < aux.length; i++){
+      const x = await this.apiService.getFeatureByIndex(this.menuItems[0], aux[i].index)
+      console.log(x)
+    }
+
     // let aux = await this.apiService.getAbilityScores()
     // console.log("aaaaaaaaaaaaa", aux)
   }
