@@ -49,7 +49,7 @@ describe('ApiService', () => {
       const mockData = { index: 'spell1' };
       mockedAxios.get.mockResolvedValueOnce({ data: mockData });
 
-      const result = await service.getFeatureByIndex('/api/spells/spell1');
+      const result = await service.getFeatureByIndex('spells', 'spell1');
       
       expect(mockedAxios.get).toHaveBeenCalledWith('https://www.dnd5eapi.co/api/spells/spell1');
       expect(result).toEqual(mockData);
@@ -60,7 +60,7 @@ describe('ApiService', () => {
       mockedAxios.get.mockRejectedValueOnce(new Error(errorMessage));
 
       try {
-        await service.getFeatureByIndex('/api/spells/spell1');
+        await service.getFeatureByIndex('spells', 'spell1');
       } catch (error: any) {
         expect(error.message).toEqual(errorMessage);
       }
