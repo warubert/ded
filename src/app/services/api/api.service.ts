@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import axios from 'axios';
 
 @Injectable({
@@ -50,8 +49,8 @@ export class ApiService {
       })
   }
 
-  getFeatureByIndex(url: string) {
-    let urlAux = this.apiURL2 + url
+  getFeatureByIndex(collection: string, index: string) {
+    let urlAux = this.apiURL + collection + "/" + index
     console.log(urlAux)
     return axios
       .get(urlAux)
@@ -59,5 +58,4 @@ export class ApiService {
         return response.data;
       })
   }
-
 }
